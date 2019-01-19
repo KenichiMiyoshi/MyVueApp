@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>My Vue App</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!--(独自追加)v-cloakでVueのインスタンスがコンパイルされるまで非表示({{}}のチラツキ防止)-->
+  <div id="app" class="container" v-cloak>
+    <h1>
+    <button @click="purge">Purge</button>
+        My Todos
+        <span class="info">({{ remaining.length }}/{{ todos.length }})</span>
+    </h1>
+    <!--todos.length がfalseのときにメッセージ(v-else以下)を表示-->
+    <ul v-if="todos.length">
+    <!-- <li>{{ todos[0] }}</li>
+      <li>{{ todos[1] }}</li>
+      <li>{{ todos[2] }}</li> -->
+      <!--v- から始まる特殊な属性をディレクティブと呼ぶ。index に 0 から始まる順番を入れる-->
+      <li v-for="(todo, index) in todos">
+          <!--v-model に対して todo.isDone を紐づけ-->
+            <input type="checkbox" v-model="todo.isDone">
+            <!--todo の isDone が true の場合は、 done クラスをつける-->
+            <!--v-bindは : で省略化-->
+            <span :class="{done: todo.isDone}">{{ todo.title }}</span>
+            <span @click="deleteItem(index)" class="command">[x]</span>
+        </li>
+    </ul>
+    <ul v-else>
+            <li>Nothing to do, yay!</li>
+    </ul>
+    <!-- <form v-on:submit="addItem"> -->
+    <!--v-on は「イベント」のディレクティブ、@ で 省略可。.preventで規定のページが遷移することを無効化-->
+    <form @submit.prevent="addItem">
+      <input type="text" v-model="newItem">
+      <input type="submit" value="Add">
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="js/todo.js"></script>
+</body>
+</html>
